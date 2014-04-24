@@ -1,0 +1,27 @@
+{
+  "name": "http-server-plus",
+  "version": "0.0.0",
+  "license": "ISC",
+  "description": "Augmented `http.Server`, HTTP/HTTPS and multiple ports on the same instance",
+  "keywords": [
+    "http",
+    "https",
+    "server",
+    "ports"
+  ],
+  "author": "Julien Fontanet <julien.fontanet@isonoe.net> (http://julien.isonoe.net/)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/julien-f/http-server-plus"
+  },
+  "dependencies": {
+    "event-to-promise": "^0.2.2"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "mocha": "^1.18.2"
+  },
+  "scripts": {
+    "test": "mocha -R spec index.spec.js"
+  }
+}
