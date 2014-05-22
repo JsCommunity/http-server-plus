@@ -15,7 +15,7 @@
     "url": "https://github.com/julien-f/http-server-plus"
   },
   "dependencies": {
-    "event-to-promise": "^0.2.3"
+    "event-to-promise": "^0.2.4"
   },
   "devDependencies": {
     "chai": "^1.9.1",
