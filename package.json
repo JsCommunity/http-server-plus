@@ -23,5 +23,8 @@
   },
   "scripts": {
     "test": "mocha -R spec index.spec.js"
-  }
+  },
+  "files": [
+    "index.js"
+  ]
 }
