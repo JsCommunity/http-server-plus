@@ -6,6 +6,7 @@ var EventEmitter = require('events').EventEmitter;
 var http = require('http');
 var https = require('https');
 var inherits = require('util').inherits;
+var resolvePath = require('path').resolve;
 
 //--------------------------------------------------------------------
 
@@ -23,6 +24,13 @@ var forwardedEvents = [
   'upgrade',
 ];
 
+// Wrap a value in a function.
+var wrap = function (value) {
+  return function () {
+    return value;
+  };
+};
+
 //====================================================================
 
 var Server = function () {
@@ -35,6 +43,12 @@ var proto = Server.prototype;
 proto.addresses = function () {
   return this._servers.map(function (server) {
     return server.address();
+  });
+};
+
+proto.niceAddresses = function () {
+  return this._servers.map(function (server) {
+    return server.niceAddress();
   });
 };
 
@@ -54,27 +68,56 @@ proto.listen = function (opts) {
   var server;
   var servers = this._servers;
 
+  // Human readable address.
+  var address;
+
   if (opts.certificate && opts.key)
   {
     server = https.createServer({
       cert: opts.certificate,
       key: opts.key,
     });
+    address = 'https://';
   }
   else
   {
     server = http.createServer();
+    address = 'http://';
   }
   var i = servers.length;
   servers[i] = server;
 
   if (opts.socket)
   {
-    server.listen(opts.socket);
+    var socket = resolvePath(opts.socket);
+    server.listen(socket);
+    server.niceAddress = wrap(address + socket);
   }
   else
   {
-    server.listen(opts.port, opts.host || '0.0.0.0');
+    var host = opts.host || '0.0.0.0';
+    var port = +opts.port || 0;
+    server.listen(port, host);
+
+    if (port === 0)
+    {
+      server.niceAddress = function () {
+        var realAddress = this.address();
+
+        if (!realAddress)
+        {
+          return address + ':[unknown]';
+        }
+
+        address += ':'+ realAddress.port;
+        server.niceAddress = wrap(address);
+        return address;
+      };
+    }
+    else
+    {
+      server.niceAddress = wrap(address + host +':'+ port);
+    }
   }
 
   var emit = this.emit.bind(this);
@@ -86,11 +129,12 @@ proto.listen = function (opts) {
       emit('close');
     }
   });
-  server.on('error', function (error) {
+
+  server.on('error', function () {
     servers.splice(i, 1);
 
-    // FIXME: do not use emit to keep the original context.
-    emit('error', error);
+    // FIXME: Should it be forwarded and be fatal if there is no
+    // listeners?
   });
 
   var listeners = this.listeners.bind(this);

@@ -28,6 +28,10 @@ describe('HttpServerPlus', function () {
     it('returns the list of addresses the server is listening at');
   });
 
+  describe('.niceAddresses()', function () {
+    it('returns the list of human readable addresses the server is listening at');
+  });
+
   // TODO
   describe('.listen()', function () {
     it('can use a host:port');
