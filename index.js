@@ -34,6 +34,8 @@ var wrap = function (value) {
 //====================================================================
 
 var Server = function () {
+  EventEmitter.call(this);
+
   this._servers = [];
 };
 inherits(Server, EventEmitter);
