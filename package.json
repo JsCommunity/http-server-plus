@@ -15,11 +15,11 @@
     "url": "https://github.com/julien-f/http-server-plus"
   },
   "dependencies": {
-    "event-to-promise": "^0.2.4"
+    "event-to-promise": "^0.3.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",
-    "mocha": "^1.20.0"
+    "mocha": "^1.20.1"
   },
   "scripts": {
     "test": "mocha -R spec index.spec.js"
