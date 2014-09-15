@@ -105,25 +105,29 @@ proto.listen = function Server$listen(opts) {
     var port = +opts.port || 0;
     server.listen(port, host);
 
-    if (port === 0)
-    {
-      server.niceAddress = function niceAddress() {
-        var realAddress = this.address();
+    server.niceAddress = function niceAddress() {
+      var realAddress = this.address();
 
-        if (!realAddress)
-        {
-          return address + ':[unknown]';
-        }
+      if (!realAddress)
+      {
+        // Unknown for now.
+        return;
+      }
 
-        address += ':'+ realAddress.port;
-        server.niceAddress = wrap(address);
-        return address;
-      };
-    }
-    else
-    {
-      server.niceAddress = wrap(address + host +':'+ port);
-    }
+      var addr = realAddress.address;
+      var port = realAddress.port;
+      if (addr.indexOf(':') !== -1) {
+        // Probably IPv6, needs bracket to form valid URL.
+        address += '['+ addr +']';
+      } else {
+        address += addr;
+      }
+      address += ':'+ port;
+
+      server.niceAddress = wrap(address);
+
+      return address;
+    };
   }
 
   var emit = this.emit.bind(this);
