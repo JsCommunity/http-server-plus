@@ -26,5 +26,8 @@
   },
   "files": [
     "index.js"
-  ]
+  ],
+  "directories": {
+    "example": "examples"
+  }
 }
