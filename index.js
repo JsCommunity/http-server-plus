@@ -36,16 +36,16 @@ inherits(Server, EventEmitter);
 
 var proto = Server.prototype;
 
+function getAddress(server) {
+  return server.address();
+}
 proto.addresses = function Server$addresses() {
-  return this._servers.map(function (server) {
-    return server.address();
-  });
+  return this._servers.map(getAddress);
 };
 
 function getNiceAddress(server) {
   return server.niceAddress();
 }
-
 proto.niceAddresses = function Server$niceAddresses() {
   return this._servers.map(getNiceAddress);
 };
@@ -81,6 +81,7 @@ proto.listen = function Server$listen(opts) {
     server = http.createServer();
     protocol = 'http';
   }
+
   var i = servers.length;
   servers[i] = server;
 

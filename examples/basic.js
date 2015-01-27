@@ -16,5 +16,5 @@ server.listen({
   host: 'localhost',
   port: 8080,
 }).then(function () {
-  console.log('Listening on %s', this.niceAddress());
+  console.log('Listening on', this.niceAddress());
 });
