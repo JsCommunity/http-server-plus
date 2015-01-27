@@ -101,7 +101,7 @@ proto.listen = function Server$listen(opts) {
   }
   else
   {
-    server.listen(opts.port, opts.host);
+    server.listen(opts.port, opts.hostname);
 
     server.niceAddress = function niceAddress() {
       var realAddress = this.address();

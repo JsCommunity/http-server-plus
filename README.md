@@ -30,7 +30,7 @@ var server = require('http-server-plus').create(app);
 require('bluebird').all([
   // Listen on port localhost:80.
   server.listen({
-    host: 'localhost',
+    hostname: 'localhost',
     port: 80,
   }),
 
