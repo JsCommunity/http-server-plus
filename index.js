@@ -112,7 +112,9 @@ proto.listen = function Server$listen(opts) {
 
     niceAddress = formatUrl({
       protocol: protocol,
-      hostname: opts.hostname,
+
+      // Hostname default to localhost.
+      hostname: opts.hostname || 'localhost',
 
       // No port means random, unknown for now.
       port: opts.port || '<unknown>'
