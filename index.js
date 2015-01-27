@@ -3,6 +3,7 @@
 //====================================================================
 
 var EventEmitter = require('events').EventEmitter;
+var formatUrl = require('url').format;
 var http = require('http');
 var https = require('https');
 var inherits = require('util').inherits;
@@ -23,13 +24,6 @@ var forwardedEvents = [
   'request',
   'upgrade',
 ];
-
-// Wrap a value in a function.
-function wrap(value) {
-  return function wrappedValue() {
-    return value;
-  };
-}
 
 //====================================================================
 
@@ -71,61 +65,57 @@ proto.close = function Server$close(callback) {
 };
 
 proto.listen = function Server$listen(opts) {
-  var server;
   var servers = this._servers;
 
-  // Human readable address.
-  var address;
-
+  var server, protocol;
   if (opts.certificate && opts.key)
   {
     server = https.createServer({
       cert: opts.certificate,
       key: opts.key,
     });
-    address = 'https://';
+    protocol = 'https';
   }
   else
   {
     server = http.createServer();
-    address = 'http://';
+    protocol = 'http';
   }
   var i = servers.length;
   servers[i] = server;
+
+  var niceAddress;
+  server.niceAddress = function () {
+    return niceAddress;
+  };
 
   if (opts.socket)
   {
     var socket = resolvePath(opts.socket);
     server.listen(socket);
-    server.niceAddress = wrap(address + socket);
+    niceAddress = formatUrl({
+      protocol: protocol,
+      path: socket,
+    });
   }
   else
   {
-    server.listen(opts.port, opts.hostname);
+    server.listen(opts.port, opts.hostname, function () {
+      var address = this.address();
+      niceAddress = formatUrl({
+        protocol: protocol,
+        hostname: address.address,
+        port: address.port
+      });
+    });
 
-    server.niceAddress = function niceAddress() {
-      var realAddress = this.address();
+    niceAddress = formatUrl({
+      protocol: protocol,
+      hostname: opts.hostname,
 
-      if (!realAddress)
-      {
-        // Unknown for now.
-        return;
-      }
-
-      var addr = realAddress.address;
-      var port = realAddress.port;
-      if (addr.indexOf(':') !== -1) {
-        // Probably IPv6, needs bracket to form valid URL.
-        address += '['+ addr +']';
-      } else {
-        address += addr;
-      }
-      address += ':'+ port;
-
-      server.niceAddress = wrap(address);
-
-      return address;
-    };
+      // No port means random, unknown for now.
+      port: opts.port || '<unknown>'
+    });
   }
 
   var emit = this.emit.bind(this);
