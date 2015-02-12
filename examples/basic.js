@@ -15,6 +15,8 @@ var server  = httpServerPlus.create(function onRequest(request, response) {
 server.listen({
   host: 'localhost',
   port: 8080,
-}).then(function () {
-  console.log('Listening on', this.niceAddress());
+}).then(function (niceAddress) {
+  console.log('Listening on', niceAddress);
+}).catch(function (error) {
+  console.log(error.code, '- Failed to listen on', error.niceAddress);
 });

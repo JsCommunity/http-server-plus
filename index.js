@@ -43,13 +43,6 @@ proto.addresses = function Server$addresses() {
   return this._servers.map(getAddress);
 };
 
-function getNiceAddress(server) {
-  return server.niceAddress();
-}
-proto.niceAddresses = function Server$niceAddresses() {
-  return this._servers.map(getNiceAddress);
-};
-
 function close(server) {
   server.close();
 }
@@ -86,9 +79,6 @@ proto.listen = function Server$listen(opts) {
   servers[i] = server;
 
   var niceAddress;
-  server.niceAddress = function () {
-    return niceAddress;
-  };
 
   if (opts.socket)
   {
@@ -151,7 +141,15 @@ proto.listen = function Server$listen(opts) {
     });
   });
 
-  return eventToPromise(server, 'listening');
+  return eventToPromise(server, 'listening').then(
+    function () {
+      return niceAddress;
+    },
+    function (error) {
+      error.niceAddress = niceAddress;
+      throw error;
+    }
+  );
 };
 
 function ref(server) {

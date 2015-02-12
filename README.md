@@ -46,10 +46,10 @@ require('bluebird').all([
   server.listen({
     socket: __dirname +'/http.sock',
   }),
-]).then(function () {
-  console.log('server is listening on', server.addresses());
+]).then(function (niceAddresses) {
+  console.log('server is listening on', niceAddresses);
 }).catch(function (error) {
-  console.error('The server could not listen', error)  ;
+  console.error('The server could not listen on', error.niceAddress)  ;
 });
 ```
 
