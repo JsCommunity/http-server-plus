@@ -3,10 +3,12 @@
 //====================================================================
 
 var EventEmitter = require('events').EventEmitter;
+var forEach = require('lodash.foreach');
 var formatUrl = require('url').format;
 var http = require('http');
 var https = require('https');
 var inherits = require('util').inherits;
+var map = require('lodash.map');
 var resolvePath = require('path').resolve;
 
 //--------------------------------------------------------------------
@@ -30,7 +32,7 @@ var forwardedEvents = [
 function Server() {
   EventEmitter.call(this);
 
-  this._servers = [];
+  this._servers = Object.create(null);
 }
 inherits(Server, EventEmitter);
 
@@ -40,7 +42,7 @@ function getAddress(server) {
   return server.address();
 }
 proto.addresses = function Server$addresses() {
-  return this._servers.map(getAddress);
+  return map(this._servers, getAddress);
 };
 
 function close(server) {
@@ -54,9 +56,10 @@ proto.close = function Server$close(callback) {
   }
 
   // Closes each servers.
-  this._servers.forEach(close);
+  forEach(this._servers, close);
 };
 
+var nextId = 0;
 proto.listen = function Server$listen(opts) {
   var servers = this._servers;
 
@@ -75,8 +78,8 @@ proto.listen = function Server$listen(opts) {
     protocol = 'http';
   }
 
-  var i = servers.length;
-  servers[i] = server;
+  var id = nextId++;
+  servers[id] = server;
 
   var niceAddress;
 
@@ -113,7 +116,7 @@ proto.listen = function Server$listen(opts) {
 
   var emit = this.emit.bind(this);
   server.once('close', function onClose() {
-    servers.splice(i, 1);
+    delete servers[id];
 
     if (!servers.length)
     {
@@ -122,20 +125,20 @@ proto.listen = function Server$listen(opts) {
   });
 
   server.on('error', function onError() {
-    servers.splice(i, 1);
+    delete servers[id];
 
     // FIXME: Should it be forwarded and be fatal if there is no
     // listeners?
   });
 
   var listeners = this.listeners.bind(this);
-  forwardedEvents.forEach(function setUpEventForwarding(event) {
+  forEach(forwardedEvents, function setUpEventForwarding(event) {
     server.on(event, function eventHandler() {
       var ctxt = this;
       var args = arguments;
 
       // Do not use emit directly to keep the original context.
-      listeners(event).forEach(function forwardEvent(listener) {
+      forEach(listeners(event), function forwardEvent(listener) {
         listener.apply(ctxt, args);
       });
     });
