@@ -16,8 +16,9 @@
   },
   "dependencies": {
     "event-to-promise": "^0.3.2",
-    "lodash.foreach": "^3.0.1",
-    "lodash.map": "^3.0.0"
+    "lodash.foreach": "^3",
+    "lodash.isempty": "^3",
+    "lodash.map": "^3"
   },
   "devDependencies": {
     "chai": "^1.9.1",

@@ -8,6 +8,7 @@ var formatUrl = require('url').format
 var http = require('http')
 var https = require('https')
 var inherits = require('util').inherits
+var isEmpty = require('lodash.isempty')
 var map = require('lodash.map')
 var resolvePath = require('path').resolve
 
@@ -54,6 +55,12 @@ proto.close = function Server$close (callback) {
     this.on('close', callback)
   }
 
+  // Emit the close event even if there are no registered servers.
+  if (isEmpty(this._servers)) {
+    setImmediate(function () {
+      this.emit('close')
+    })
+  }
   // Closes each servers.
   forEach(this._servers, close)
 }

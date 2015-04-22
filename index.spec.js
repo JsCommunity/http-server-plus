@@ -43,6 +43,12 @@ describe('HttpServerPlus', function () {
     it('returns a promise which will reject if failure')
   })
 
+  describe('.close()', function () {
+    it('closes all servers')
+    it('emit the `close` event when all servers are closed')
+    it('emit the `close` event even if there are no servers')
+  })
+
   // TODO
   it('can be used exactly like `{http,https}.Server`')
 })
