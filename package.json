@@ -21,10 +21,11 @@
   },
   "devDependencies": {
     "chai": "^1.9.1",
-    "mocha": "^1.20.1"
+    "mocha": "^1.20.1",
+    "standard": "*"
   },
   "scripts": {
-    "test": "mocha -R spec index.spec.js"
+    "test": "standard && mocha -R spec index.spec.js"
   },
   "files": [
     "index.js"

@@ -1,21 +1,21 @@
-'use strict';
+'use strict'
 
-//====================================================================
+// ===================================================================
 
-var EventEmitter = require('events').EventEmitter;
-var forEach = require('lodash.foreach');
-var formatUrl = require('url').format;
-var http = require('http');
-var https = require('https');
-var inherits = require('util').inherits;
-var map = require('lodash.map');
-var resolvePath = require('path').resolve;
+var EventEmitter = require('events').EventEmitter
+var forEach = require('lodash.foreach')
+var formatUrl = require('url').format
+var http = require('http')
+var https = require('https')
+var inherits = require('util').inherits
+var map = require('lodash.map')
+var resolvePath = require('path').resolve
 
-//--------------------------------------------------------------------
+// -------------------------------------------------------------------
 
-var eventToPromise = require('event-to-promise');
+var eventToPromise = require('event-to-promise')
 
-//====================================================================
+// ===================================================================
 
 var forwardedEvents = [
   'checkContinue',
@@ -24,84 +24,77 @@ var forwardedEvents = [
   'connection',
   'listening',
   'request',
-  'upgrade',
-];
+  'upgrade'
+]
 
-//====================================================================
+// ===================================================================
 
-function Server() {
-  EventEmitter.call(this);
+function Server () {
+  EventEmitter.call(this)
 
-  this._servers = Object.create(null);
+  this._servers = Object.create(null)
 }
-inherits(Server, EventEmitter);
+inherits(Server, EventEmitter)
 
-var proto = Server.prototype;
+var proto = Server.prototype
 
-function getAddress(server) {
-  return server.address();
+function getAddress (server) {
+  return server.address()
 }
-proto.addresses = function Server$addresses() {
-  return map(this._servers, getAddress);
-};
-
-function close(server) {
-  server.close();
+proto.addresses = function Server$addresses () {
+  return map(this._servers, getAddress)
 }
 
-proto.close = function Server$close(callback) {
-  if (callback)
-  {
-    this.on('close', callback);
+function close (server) {
+  server.close()
+}
+
+proto.close = function Server$close (callback) {
+  if (callback) {
+    this.on('close', callback)
   }
 
   // Closes each servers.
-  forEach(this._servers, close);
-};
+  forEach(this._servers, close)
+}
 
-var nextId = 0;
-proto.listen = function Server$listen(opts) {
-  var servers = this._servers;
+var nextId = 0
+proto.listen = function Server$listen (opts) {
+  var servers = this._servers
 
-  var server, protocol;
-  if (opts.certificate && opts.key)
-  {
+  var server, protocol
+  if (opts.certificate && opts.key) {
     server = https.createServer({
       cert: opts.certificate,
-      key: opts.key,
-    });
-    protocol = 'https';
-  }
-  else
-  {
-    server = http.createServer();
-    protocol = 'http';
+      key: opts.key
+    })
+    protocol = 'https'
+  } else {
+    server = http.createServer()
+    protocol = 'http'
   }
 
-  var id = nextId++;
-  servers[id] = server;
+  var id = nextId++
+  servers[id] = server
 
-  var niceAddress;
+  var niceAddress
 
-  if (opts.socket)
-  {
-    var socket = resolvePath(opts.socket);
-    server.listen(socket);
+  if (opts.socket) {
+    var socket = resolvePath(opts.socket)
+    server.listen(socket)
     niceAddress = formatUrl({
       protocol: protocol,
-      path: socket,
-    });
-  }
-  else
-  {
+      path: socket
+    })
+  } else {
     server.listen(opts.port, opts.hostname, function () {
-      var address = this.address();
+      var address = this.address()
       niceAddress = formatUrl({
         protocol: protocol,
         hostname: address.address,
         port: address.port
-      });
-    });
+      })
+    })
 
     niceAddress = formatUrl({
       protocol: protocol,
@@ -111,75 +104,73 @@ proto.listen = function Server$listen(opts) {
 
       // No port means random, unknown for now.
       port: opts.port || '<unknown>'
-    });
+    })
   }
 
-  var emit = this.emit.bind(this);
-  server.once('close', function onClose() {
-    delete servers[id];
+  var emit = this.emit.bind(this)
+  server.once('close', function onClose () {
+    delete servers[id]
 
-    if (!servers.length)
-    {
-      emit('close');
+    if (!servers.length) {
+      emit('close')
     }
-  });
+  })
 
-  server.on('error', function onError() {
-    delete servers[id];
+  server.on('error', function onError () {
+    delete servers[id]
 
     // FIXME: Should it be forwarded and be fatal if there is no
     // listeners?
-  });
+  })
 
-  var listeners = this.listeners.bind(this);
-  forEach(forwardedEvents, function setUpEventForwarding(event) {
-    server.on(event, function eventHandler() {
-      var ctxt = this;
-      var args = arguments;
+  var listeners = this.listeners.bind(this)
+  forEach(forwardedEvents, function setUpEventForwarding (event) {
+    server.on(event, function eventHandler () {
+      var ctxt = this
+      var args = arguments
 
       // Do not use emit directly to keep the original context.
-      forEach(listeners(event), function forwardEvent(listener) {
-        listener.apply(ctxt, args);
-      });
-    });
-  });
+      forEach(listeners(event), function forwardEvent (listener) {
+        listener.apply(ctxt, args)
+      })
+    })
+  })
 
   return eventToPromise(server, 'listening').then(
     function () {
-      return niceAddress;
+      return niceAddress
     },
     function (error) {
-      error.niceAddress = niceAddress;
-      throw error;
+      error.niceAddress = niceAddress
+      throw error
     }
-  );
-};
-
-function ref(server) {
-  server.ref();
+  )
 }
 
-proto.ref = function Server$ref() {
-  this._servers.forEach(ref);
-};
-
-function unref(server) {
-  server.unref();
+function ref (server) {
+  server.ref()
 }
 
-proto.unref = function Server$unref() {
-  this._servers.forEach(unref);
-};
+proto.ref = function Server$ref () {
+  this._servers.forEach(ref)
+}
 
-//====================================================================
+function unref (server) {
+  server.unref()
+}
 
-module.exports = exports = Server;
+proto.unref = function Server$unref () {
+  this._servers.forEach(unref)
+}
 
-exports.create = function create(requestListener) {
-  var server = new Server();
-  if (requestListener)
-  {
-    server.on('request', requestListener);
+// ===================================================================
+
+module.exports = exports = Server
+
+exports.create = function create (requestListener) {
+  var server = new Server()
+  if (requestListener) {
+    server.on('request', requestListener)
   }
-  return server;
-};
+  return server
+}
