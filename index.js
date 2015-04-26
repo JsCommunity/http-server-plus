@@ -57,8 +57,9 @@ proto.close = function Server$close (callback) {
 
   // Emit the close event even if there are no registered servers.
   if (isEmpty(this._servers)) {
+    var self = this
     setImmediate(function () {
-      this.emit('close')
+      self.emit('close')
     })
   }
   // Closes each servers.
