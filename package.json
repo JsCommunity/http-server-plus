@@ -15,14 +15,14 @@
     "url": "https://github.com/julien-f/http-server-plus"
   },
   "dependencies": {
-    "event-to-promise": "^0.3.2",
+    "event-to-promise": "^0.4.0",
     "lodash.foreach": "^3",
     "lodash.isempty": "^3",
     "lodash.map": "^3"
   },
   "devDependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.20.1",
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3",
     "standard": "*"
   },
   "scripts": {
