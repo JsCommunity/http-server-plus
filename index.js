@@ -3,10 +3,10 @@
 // ===================================================================
 
 var EventEmitter = require('events').EventEmitter
+var eventToPromise = require('event-to-promise')
 var forEach = require('lodash.foreach')
 var formatUrl = require('url').format
 var http = require('http')
-var https = require('https')
 var inherits = require('util').inherits
 var isEmpty = require('lodash.isempty')
 var map = require('lodash.map')
@@ -14,7 +14,12 @@ var resolvePath = require('path').resolve
 
 // -------------------------------------------------------------------
 
-var eventToPromise = require('event-to-promise')
+var https
+try {
+  https = require('http2')
+} catch (e) {
+  https = require('https')
+}
 
 // ===================================================================
 

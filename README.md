@@ -4,7 +4,7 @@
 [![Dependency Status](https://david-dm.org/julien-f/http-server-plus/status.svg?theme=shields.io)](https://david-dm.org/julien-f/http-server-plus)
 [![devDependency Status](https://david-dm.org/julien-f/http-server-plus/dev-status.svg?theme=shields.io)](https://david-dm.org/julien-f/http-server-plus#info=devDependencies)
 
-> Augmented `http.Server`, HTTP/HTTPS and multiple ports on the same instance
+> Augmented `http.Server`, HTTP/HTTPS/HTTP2 and multiple ports on the same instance
 
 
 ## Install
