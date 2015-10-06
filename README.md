@@ -59,6 +59,50 @@ require('bluebird').all([
 })
 ```
 
+Using [ES2016's async functions](https://github.com/tc39/ecmascript-asyncawait):
+
+```javascript
+import createExpressApp from 'express'
+import {create} from 'http-server-plus'
+
+async function main () {
+  const app = createExpressApp()
+
+  // The `create()` method can also take a `requestListener`, just
+  // like `http.createServer()`.
+  const server = create(app)
+
+  try {
+    // The listen method returns a promise which resolves when the server
+    // starts listening.
+    const niceAddresses = await Promise.all([
+      // Listen on port localhost:80.
+      server.listen({
+        hostname: 'localhost',
+        port: 80
+      }),
+
+      // Listen on port 443, using HTTPS.
+      server.listen({
+        port: 443,
+
+        cert: require('fs').readFileSync(__dirname +'/certificate.pem'),
+        key: require('fs').readFileSync(__dirname +'/private_key.pem')
+      }),
+
+      // Listen on socket.
+      server.listen({
+        socket: __dirname +'/http.sock'
+      })
+    ])
+
+    console.log('the server is listening on', niceAdresses)
+  } catch (error) {
+    console.error('the server could not listen on', error.niceAddress)
+  }
+}
+```
+
 ## Contributing
 
 Contributions are *very* welcome, either on the documentation or on
