@@ -99,7 +99,7 @@ proto.listen = function Server$listen (opts) {
       protocol: protocol,
       path: socket
     })
-  } else {
+  } else if ('port' in opts) {
     server.listen(opts.port, opts.hostname, function () {
       var address = this.address()
       niceAddress = formatUrl({
@@ -118,6 +118,8 @@ proto.listen = function Server$listen (opts) {
       // No port means random, unknown for now.
       port: opts.port || '<unknown>'
     })
+  } else {
+    throw new Error('invalid options (requires either socket or port)')
   }
 
   var emit = this.emit.bind(this)
