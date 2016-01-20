@@ -83,20 +83,19 @@ proto.close = function Server$close (callback) {
 var nextId = 0
 proto.listen = function Server$listen (opts) {
   opts = assign({}, opts)
-  var certificate = extractProperty(opts, 'certificate')
   var port = extractProperty(opts, 'port')
   var hostname = extractProperty(opts, 'hostname')
-  var key = extractProperty(opts, 'key')
   var socket = extractProperty(opts, 'socket')
 
   var servers = this._servers
 
   var server, protocol
-  if (certificate && key) {
-    server = https.createServer(assign(opts, {
-      cert: certificate,
-      key: key
-    }))
+  if (
+    opts.pfx ||
+    opts.SNICallback ||
+    (opts.certificate && opts.key)
+  ) {
+    server = https.createServer(opts)
     protocol = 'https'
   } else {
     server = http.createServer(opts)
