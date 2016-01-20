@@ -16,7 +16,7 @@ var resolvePath = require('path').resolve
 
 var https
 try {
-  https = require('http2')
+  https = require('spdy')
 } catch (e) {
   https = require('https')
 }
