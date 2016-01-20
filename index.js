@@ -2,6 +2,7 @@
 
 // ===================================================================
 
+var assign = require('lodash.assign')
 var EventEmitter = require('events').EventEmitter
 var eventToPromise = require('event-to-promise')
 var forEach = require('lodash.foreach')
@@ -32,6 +33,14 @@ var forwardedEvents = [
   'request',
   'upgrade'
 ]
+
+function extractProperty (obj, prop) {
+  var value = obj[prop]
+  if (value !== undefined) {
+    delete obj[prop]
+    return value
+  }
+}
 
 // ===================================================================
 
@@ -73,17 +82,24 @@ proto.close = function Server$close (callback) {
 
 var nextId = 0
 proto.listen = function Server$listen (opts) {
+  opts = assign({}, opts)
+  var certificate = extractProperty(opts, 'certificate')
+  var port = extractProperty(opts, 'port')
+  var hostname = extractProperty(opts, 'hostname')
+  var key = extractProperty(opts, 'key')
+  var socket = extractProperty(opts, 'socket')
+
   var servers = this._servers
 
   var server, protocol
-  if (opts.certificate && opts.key) {
-    server = https.createServer({
-      cert: opts.certificate,
-      key: opts.key
-    })
+  if (certificate && key) {
+    server = https.createServer(assign(opts, {
+      cert: certificate,
+      key: key
+    }))
     protocol = 'https'
   } else {
-    server = http.createServer()
+    server = http.createServer(opts)
     protocol = 'http'
   }
 
@@ -92,15 +108,15 @@ proto.listen = function Server$listen (opts) {
 
   var niceAddress
 
-  if (opts.socket) {
-    var socket = resolvePath(opts.socket)
+  if (socket != null) {
+    socket = resolvePath(socket)
     server.listen(socket)
     niceAddress = formatUrl({
       protocol: protocol,
       path: socket
     })
-  } else if ('port' in opts) {
-    server.listen(opts.port, opts.hostname, function () {
+  } else if (port != null) {
+    server.listen(port, hostname, function () {
       var address = this.address()
       niceAddress = formatUrl({
         protocol: protocol,
@@ -113,10 +129,10 @@ proto.listen = function Server$listen (opts) {
       protocol: protocol,
 
       // Hostname default to localhost.
-      hostname: opts.hostname || 'localhost',
+      hostname: hostname || 'localhost',
 
       // No port means random, unknown for now.
-      port: opts.port || '<unknown>'
+      port: port || '<unknown>'
     })
   } else {
     throw new Error('invalid options (requires either socket or port)')
