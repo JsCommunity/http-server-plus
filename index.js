@@ -150,7 +150,7 @@ proto.listen = function Server$listen (opts) {
   server.on('error', function onError () {
     delete servers[id]
 
-    // FIXME: Should it be forwarded and be fatal if there is no
+    // FIXME: Should it be forwarded and be fatal if there are no
     // listeners?
   })
 
