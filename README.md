@@ -20,7 +20,7 @@ npm install --save http-server-plus
 To add support for [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2):
 
 ```
-npm install --save http2
+npm install --save spdy
 ```
 
 ## Example
