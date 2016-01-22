@@ -93,7 +93,7 @@ proto.listen = function Server$listen (opts) {
   if (
     opts.pfx ||
     opts.SNICallback ||
-    (opts.certificate && opts.key)
+    (opts.cert && opts.key)
   ) {
     server = https.createServer(opts)
     protocol = 'https'
