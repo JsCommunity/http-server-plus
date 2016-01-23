@@ -51,6 +51,11 @@ require('bluebird').all([
   // Listen on socket.
   server.listen({
     socket: __dirname +'/http.sock'
+  }),
+
+  // Listen on file descriptor (with systemd for instance).
+  server.listen({
+    fd: 3
   })
 ]).then(function (niceAddresses) {
   console.log('server is listening on', niceAddresses)

@@ -83,6 +83,7 @@ proto.close = function Server$close (callback) {
 var nextId = 0
 proto.listen = function Server$listen (opts) {
   opts = assign({}, opts)
+  var fd = extractProperty(opts, 'fd')
   var port = extractProperty(opts, 'port')
   var hostname = extractProperty(opts, 'hostname')
   var socket = extractProperty(opts, 'socket')
@@ -105,25 +106,17 @@ proto.listen = function Server$listen (opts) {
   var id = nextId++
   servers[id] = server
 
+  // Compute a temporary nice address to display in case of error.
   var niceAddress
-
-  if (socket != null) {
+  if (fd != null) {
+    server.listen({ fd })
+    niceAddress = protocol + '://<fd:' + fd + '>'
+  } else if (socket != null) {
     socket = resolvePath(socket)
     server.listen(socket)
-    niceAddress = formatUrl({
-      protocol: protocol,
-      path: socket
-    })
+    niceAddress = protocol + '://' + socket
   } else if (port != null) {
-    server.listen(port, hostname, function () {
-      var address = this.address()
-      niceAddress = formatUrl({
-        protocol: protocol,
-        hostname: address.address,
-        port: address.port
-      })
-    })
-
+    server.listen(port, hostname)
     niceAddress = formatUrl({
       protocol: protocol,
 
@@ -168,7 +161,15 @@ proto.listen = function Server$listen (opts) {
 
   return eventToPromise(server, 'listening').then(
     function () {
-      return niceAddress
+      var address = server.address()
+      if (typeof address === 'string') {
+        return protocol + '://' + address
+      }
+      return formatUrl({
+        protocol: protocol,
+        hostname: address.address,
+        port: address.port
+      })
     },
     function (error) {
       error.niceAddress = niceAddress
