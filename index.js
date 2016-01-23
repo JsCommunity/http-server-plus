@@ -109,7 +109,7 @@ proto.listen = function Server$listen (opts) {
   // Compute a temporary nice address to display in case of error.
   var niceAddress
   if (fd != null) {
-    server.listen({ fd })
+    server.listen({ fd: fd })
     niceAddress = protocol + '://<fd:' + fd + '>'
   } else if (socket != null) {
     socket = resolvePath(socket)
