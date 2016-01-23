@@ -98,7 +98,7 @@ proto.listen = function Server$listen (opts) {
     server = https.createServer(opts)
     protocol = 'https'
   } else {
-    server = http.createServer(opts)
+    server = http.createServer()
     protocol = 'http'
   }
 
