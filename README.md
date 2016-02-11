@@ -11,6 +11,10 @@
 
 Download [manually](https://github.com/julien-f/http-server-plus/releases) or with package-manager.
 
+This library requires promises support, for Node versions prior to 0.12 [see
+this page](https://github.com/julien-f/js-promise-toolbox#usage) to
+enable them.
+
 #### [npm](https://npmjs.org/package/http-server-plus)
 
 ```
