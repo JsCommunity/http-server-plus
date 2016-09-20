@@ -2,15 +2,15 @@
 
 // ===================================================================
 
-var assign = require('lodash.assign')
+var assign = require('lodash/assign')
 var EventEmitter = require('events').EventEmitter
 var eventToPromise = require('event-to-promise')
-var forEach = require('lodash.foreach')
+var forEach = require('lodash/forEach')
 var formatUrl = require('url').format
 var http = require('http')
 var inherits = require('util').inherits
-var isEmpty = require('lodash.isempty')
-var map = require('lodash.map')
+var isEmpty = require('lodash/isEmpty')
+var map = require('lodash/map')
 var resolvePath = require('path').resolve
 
 // -------------------------------------------------------------------
