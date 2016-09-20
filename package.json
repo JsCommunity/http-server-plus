@@ -24,7 +24,7 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "mocha": "^3.0.2",
-    "standard": "*"
+    "standard": "^8.1.0"
   },
   "scripts": {
     "test": "standard && mocha -R spec index.spec.js"
