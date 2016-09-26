@@ -66,7 +66,7 @@ function close (server) {
 
 proto.close = function Server$close (callback) {
   if (callback) {
-    this.on('close', callback)
+    this.once('close', callback)
   }
 
   // Emit the close event even if there are no registered servers.
