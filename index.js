@@ -78,6 +78,8 @@ proto.close = function Server$close (callback) {
   }
   // Closes each servers.
   forEach(this._servers, close)
+
+  return eventToPromise(this, 'close')
 }
 
 var nextId = 0
