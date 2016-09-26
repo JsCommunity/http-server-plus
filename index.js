@@ -134,7 +134,7 @@ proto.listen = function Server$listen (opts) {
   server.once('close', function onClose () {
     delete servers[id]
 
-    if (!servers.length) {
+    if (isEmpty(servers)) {
       emit('close')
     }
   })
