@@ -75,6 +75,7 @@ proto.close = function Server$close (callback) {
     setImmediate(function () {
       self.emit('close')
     })
+    return Promise.resolve()
   }
   // Closes each servers.
   forEach(this._servers, close)
