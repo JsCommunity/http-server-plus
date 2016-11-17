@@ -1,18 +1,18 @@
 # http-server-plus
 
-[![Build Status](https://img.shields.io/travis/julien-f/http-server-plus/master.svg)](http://travis-ci.org/julien-f/http-server-plus)
-[![Dependency Status](https://david-dm.org/julien-f/http-server-plus/status.svg?theme=shields.io)](https://david-dm.org/julien-f/http-server-plus)
-[![devDependency Status](https://david-dm.org/julien-f/http-server-plus/dev-status.svg?theme=shields.io)](https://david-dm.org/julien-f/http-server-plus#info=devDependencies)
+[![Build Status](https://img.shields.io/travis/JsCommunity/http-server-plus/master.svg)](http://travis-ci.org/JsCommunity/http-server-plus)
+[![Dependency Status](https://david-dm.org/JsCommunity/http-server-plus/status.svg?theme=shields.io)](https://david-dm.org/JsCommunity/http-server-plus)
+[![devDependency Status](https://david-dm.org/JsCommunity/http-server-plus/dev-status.svg?theme=shields.io)](https://david-dm.org/JsCommunity/http-server-plus#info=devDependencies)
 
 > Augmented `http.Server`, HTTP/HTTPS/HTTP2 and multiple ports on the same instance
 
 
 ## Install
 
-Download [manually](https://github.com/julien-f/http-server-plus/releases) or with package-manager.
+Download [manually](https://github.com/JsCommunity/http-server-plus/releases) or with package-manager.
 
 This library requires promises support, for Node versions prior to 0.12 [see
-this page](https://github.com/julien-f/js-promise-toolbox#usage) to
+this page](https://github.com/JsCommunity/js-promise-toolbox#usage) to
 enable them.
 
 #### [npm](https://npmjs.org/package/http-server-plus)
@@ -119,7 +119,7 @@ the code.
 
 You may:
 
-- report any [issue](https://github.com/julien-f/http-server-plus/issues)
+- report any [issue](https://github.com/JsCommunity/http-server-plus/issues)
   you've encountered;
 - fork and create a pull request.
 
