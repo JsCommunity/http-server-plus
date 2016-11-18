@@ -4,11 +4,10 @@
 
 // ===================================================================
 
-var HttpServerPlus = require('./')
-
-// -------------------------------------------------------------------
-
 var expect = require('chai').expect
+var tcpBind = require('tcp-bind')
+
+var HttpServerPlus = require('./')
 
 // ===================================================================
 
@@ -37,6 +36,25 @@ describe('HttpServerPlus', function () {
   // TODO
   describe('.listen()', function () {
     it('can use a host:port')
+    it('can use a systemd socket', function () {
+      var SD_LISTEN_FDS_START = 3
+
+      var server = HttpServerPlus.create()
+      var fd = tcpBind(0)
+
+      var env = process.env
+      env.LISTEN_FDS = fd - SD_LISTEN_FDS_START + 1
+      env.LISTEN_PID = process.pid
+
+      return server.listen({
+        systemdSocket: fd - SD_LISTEN_FDS_START // systemd fds start at 3 but we have not control over it in Node.
+      }).then(function () {
+        delete env.LISTEN_FDS
+        delete env.LISTEN_PID
+
+        return server.close()
+      })
+    })
     it('can use a socket')
     it('can use a HTTPS certificate')
     it('returns a promise which will resolve once listening')

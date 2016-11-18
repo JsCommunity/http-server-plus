@@ -42,6 +42,24 @@ function extractProperty (obj, prop) {
   }
 }
 
+function getSystemdFd (index) {
+  if (process.pid !== +process.env.LISTEN_PID) {
+    throw new Error('systemd sockets are not meant for us (LISTEN_PID)')
+  }
+
+  var listenFds = process.env.LISTEN_FDS
+  if (listenFds == null) {
+    throw new Error('no systemd sockets found (LISTEN_FDS)')
+  }
+  var max = listenFds - 1
+
+  if (index > max) {
+    throw new Error('no such systemd socket found')
+  }
+
+  return index + 3 // 3 = SD_LISTEN_FDS_START
+}
+
 // ===================================================================
 
 function Server () {
@@ -90,6 +108,7 @@ proto.listen = function Server$listen (opts) {
   var port = extractProperty(opts, 'port')
   var hostname = extractProperty(opts, 'hostname')
   var socket = extractProperty(opts, 'socket')
+  var systemdSocket = extractProperty(opts, 'systemdSocket')
 
   var servers = this._servers
 
@@ -108,6 +127,10 @@ proto.listen = function Server$listen (opts) {
 
   var id = nextId++
   servers[id] = server
+
+  if (systemdSocket != null) {
+    fd = getSystemdFd(systemdSocket)
+  }
 
   // Compute a temporary nice address to display in case of error.
   var niceAddress
