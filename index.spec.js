@@ -1,10 +1,9 @@
 'use strict'
 
-/* eslint-env mocha */
+/* eslint-env jest */
 
 // ===================================================================
 
-var expect = require('chai').expect
 var tcpBind = require('tcp-bind')
 
 var HttpServerPlus = require('./')
@@ -14,14 +13,14 @@ var HttpServerPlus = require('./')
 describe('HttpServerPlus', function () {
   describe('#create()', function () {
     it('creates a new instance', function () {
-      expect(HttpServerPlus.create()).to.be.an.instanceof(HttpServerPlus)
+      expect(HttpServerPlus.create()).toBeInstanceOf(HttpServerPlus)
     })
 
     it('can register a `request` listener', function () {
       var listener = function () {}
       var server = HttpServerPlus.create(listener)
 
-      expect(server.listeners('request')).to.have.members([listener])
+      expect(server.listeners('request')).toEqual([listener])
     })
   })
 
