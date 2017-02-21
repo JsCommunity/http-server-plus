@@ -19,7 +19,7 @@
     "lodash": "^4.16.0"
   },
   "devDependencies": {
-    "jest": "^18.1.0",
+    "jest": "^19.0.0",
     "standard": "^8.1.0",
     "tcp-bind": "^1.2.0"
   },
