@@ -2,20 +2,20 @@
 
 // ===================================================================
 
-var assign = require('lodash/assign')
-var EventEmitter = require('events').EventEmitter
-var eventToPromise = require('event-to-promise')
-var forEach = require('lodash/forEach')
-var formatUrl = require('url').format
-var http = require('http')
-var inherits = require('util').inherits
-var isEmpty = require('lodash/isEmpty')
-var map = require('lodash/map')
-var resolvePath = require('path').resolve
+const assign = require('lodash/assign')
+const EventEmitter = require('events').EventEmitter
+const eventToPromise = require('event-to-promise')
+const forEach = require('lodash/forEach')
+const formatUrl = require('url').format
+const http = require('http')
+const inherits = require('util').inherits
+const isEmpty = require('lodash/isEmpty')
+const map = require('lodash/map')
+const resolvePath = require('path').resolve
 
 // -------------------------------------------------------------------
 
-var https
+let https
 try {
   https = require('spdy')
 } catch (e) {
@@ -24,18 +24,18 @@ try {
 
 // ===================================================================
 
-var forwardedEvents = [
+const forwardedEvents = [
   'checkContinue',
   'clientError',
   'connect',
   'connection',
   'listening',
   'request',
-  'upgrade'
+  'upgrade',
 ]
 
 function extractProperty (obj, prop) {
-  var value = obj[prop]
+  const value = obj[prop]
   if (value !== undefined) {
     delete obj[prop]
     return value
@@ -47,11 +47,11 @@ function getSystemdFd (index) {
     throw new Error('systemd sockets are not meant for us (LISTEN_PID)')
   }
 
-  var listenFds = process.env.LISTEN_FDS
+  const listenFds = process.env.LISTEN_FDS
   if (listenFds == null) {
     throw new Error('no systemd sockets found (LISTEN_FDS)')
   }
-  var max = listenFds - 1
+  const max = listenFds - 1
 
   if (index > max) {
     throw new Error('no such systemd socket found')
@@ -69,7 +69,7 @@ function Server () {
 }
 inherits(Server, EventEmitter)
 
-var proto = Server.prototype
+const proto = Server.prototype
 
 function getAddress (server) {
   return server.address()
@@ -89,7 +89,7 @@ proto.close = function Server$close (callback) {
 
   // Emit the close event even if there are no registered servers.
   if (isEmpty(this._servers)) {
-    var self = this
+    const self = this
     setImmediate(function () {
       self.emit('close')
     })
@@ -101,18 +101,18 @@ proto.close = function Server$close (callback) {
   return eventToPromise(this, 'close')
 }
 
-var nextId = 0
+let nextId = 0
 proto.listen = function Server$listen (opts) {
   opts = assign({}, opts)
-  var fd = extractProperty(opts, 'fd')
-  var port = extractProperty(opts, 'port')
-  var hostname = extractProperty(opts, 'hostname')
-  var socket = extractProperty(opts, 'socket')
-  var systemdSocket = extractProperty(opts, 'systemdSocket')
+  const hostname = extractProperty(opts, 'hostname')
+  const port = extractProperty(opts, 'port')
+  const systemdSocket = extractProperty(opts, 'systemdSocket')
+  let fd = extractProperty(opts, 'fd')
+  let socket = extractProperty(opts, 'socket')
 
-  var servers = this._servers
+  const servers = this._servers
 
-  var server, protocol
+  let server, protocol
   if (
     opts.pfx ||
     opts.SNICallback ||
@@ -125,7 +125,7 @@ proto.listen = function Server$listen (opts) {
     protocol = 'http'
   }
 
-  var id = nextId++
+  const id = nextId++
   servers[id] = server
 
   if (systemdSocket != null) {
@@ -133,7 +133,7 @@ proto.listen = function Server$listen (opts) {
   }
 
   // Compute a temporary nice address to display in case of error.
-  var niceAddress
+  let niceAddress
   if (fd != null) {
     server.listen({ fd: fd })
     niceAddress = protocol + '://<fd:' + fd + '>'
@@ -150,13 +150,13 @@ proto.listen = function Server$listen (opts) {
       hostname: hostname || 'localhost',
 
       // No port means random, unknown for now.
-      port: port || '<unknown>'
+      port: port || '<unknown>',
     })
   } else {
     throw new Error('invalid options (requires either socket or port)')
   }
 
-  var emit = this.emit.bind(this)
+  const emit = this.emit.bind(this)
   server.once('close', function onClose () {
     delete servers[id]
 
@@ -172,11 +172,11 @@ proto.listen = function Server$listen (opts) {
     // listeners?
   })
 
-  var listeners = this.listeners.bind(this)
+  const listeners = this.listeners.bind(this)
   forEach(forwardedEvents, function setUpEventForwarding (event) {
     server.on(event, function eventHandler () {
-      var ctxt = this
-      var args = arguments
+      const ctxt = this
+      const args = arguments
 
       // Do not use emit directly to keep the original context.
       forEach(listeners(event), function forwardEvent (listener) {
@@ -187,14 +187,14 @@ proto.listen = function Server$listen (opts) {
 
   return eventToPromise(server, 'listening').then(
     function () {
-      var address = server.address()
+      const address = server.address()
       if (typeof address === 'string') {
         return protocol + '://' + address
       }
       return formatUrl({
         protocol: protocol,
         hostname: address.address,
-        port: address.port
+        port: address.port,
       })
     },
     function (error) {
@@ -225,7 +225,7 @@ proto.unref = function Server$unref () {
 module.exports = exports = Server
 
 exports.create = function create (requestListener) {
-  var server = new Server()
+  const server = new Server()
   if (requestListener) {
     server.on('request', requestListener)
   }

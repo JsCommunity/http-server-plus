@@ -4,9 +4,9 @@
 
 // ===================================================================
 
-var tcpBind = require('tcp-bind')
+const tcpBind = require('tcp-bind')
 
-var HttpServerPlus = require('./')
+const HttpServerPlus = require('./')
 
 // ===================================================================
 
@@ -17,8 +17,8 @@ describe('HttpServerPlus', function () {
     })
 
     it('can register a `request` listener', function () {
-      var listener = function () {}
-      var server = HttpServerPlus.create(listener)
+      const listener = function () {}
+      const server = HttpServerPlus.create(listener)
 
       expect(server.listeners('request')).toEqual([listener])
     })
@@ -36,17 +36,17 @@ describe('HttpServerPlus', function () {
   describe('.listen()', function () {
     it('can use a host:port')
     it('can use a systemd socket', function () {
-      var SD_LISTEN_FDS_START = 3
+      const SD_LISTEN_FDS_START = 3
 
-      var server = HttpServerPlus.create()
-      var fd = tcpBind(0)
+      const server = HttpServerPlus.create()
+      const fd = tcpBind(0)
 
-      var env = process.env
+      const env = process.env
       env.LISTEN_FDS = fd - SD_LISTEN_FDS_START + 1
       env.LISTEN_PID = process.pid
 
       return server.listen({
-        systemdSocket: fd - SD_LISTEN_FDS_START // systemd fds start at 3 but we have not control over it in Node.
+        systemdSocket: fd - SD_LISTEN_FDS_START, // systemd fds start at 3 but we have not control over it in Node.
       }).then(function () {
         delete env.LISTEN_FDS
         delete env.LISTEN_PID

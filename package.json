@@ -9,28 +9,41 @@
     "server",
     "ports"
   ],
-  "author": "Julien Fontanet <julien.fontanet@isonoe.net> (http://julien.isonoe.net/)",
+  "homepage": "https://github.com/JsCommunity/http-server-plus",
+  "bugs": "https://github.com/JsCommunity/http-server-plus/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JsCommunity/http-server-plus"
+    "url": "https://github.com/JsCommunity/http-server-plus.git"
+  },
+  "engines": {
+    "node": ">=4"
   },
   "dependencies": {
     "event-to-promise": "^0.8.0",
     "lodash": "^4.16.0"
   },
   "devDependencies": {
-    "jest": "^19.0.0",
-    "standard": "^9.0.0",
-    "tcp-bind": "^1.2.0"
+    "eslint": "^4.18.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "husky": "^0.14.3",
+    "jest": "^21"
   },
   "scripts": {
-    "posttest": "jest",
+    "commitmsg": "yarn test",
+    "dev-test": "jest --bail --watch",
+    "pretest": "eslint --ignore-path .gitignore --fix .",
     "test": "jest"
   },
-  "files": [
-    "index.js"
-  ],
-  "directories": {
-    "example": "examples"
+  "jest": {
+    "collectCoverage": true,
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "testRegex": "\\.spec\\.js$"
   }
 }

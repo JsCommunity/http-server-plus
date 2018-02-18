@@ -1,21 +1,10 @@
-# http-server-plus
-
-[![Build Status](https://img.shields.io/travis/JsCommunity/http-server-plus/master.svg)](http://travis-ci.org/JsCommunity/http-server-plus)
-[![Dependency Status](https://david-dm.org/JsCommunity/http-server-plus/status.svg?theme=shields.io)](https://david-dm.org/JsCommunity/http-server-plus)
-[![devDependency Status](https://david-dm.org/JsCommunity/http-server-plus/dev-status.svg?theme=shields.io)](https://david-dm.org/JsCommunity/http-server-plus#info=devDependencies)
+# http-server-plus [![Build Status](https://travis-ci.org/JsCommunity/http-server-plus.png?branch=master)](https://travis-ci.org/JsCommunity/http-server-plus)
 
 > Augmented `http.Server`, HTTP/HTTPS/HTTP2 and multiple ports on the same instance
 
-
 ## Install
 
-Download [manually](https://github.com/JsCommunity/http-server-plus/releases) or with package-manager.
-
-This library requires promises support, for Node versions prior to 0.12 [see
-this page](https://github.com/JsCommunity/js-promise-toolbox#usage) to
-enable them.
-
-#### [npm](https://npmjs.org/package/http-server-plus)
+Installation of the [npm package](https://npmjs.org/package/http-server-plus):
 
 ```
 npm install --save http-server-plus
@@ -117,9 +106,9 @@ async function main () {
 }
 ```
 
-## Contributing
+## Contributions
 
-Contributions are *very* welcome, either on the documentation or on
+Contributions are *very* welcomed, either on the documentation or on
 the code.
 
 You may:

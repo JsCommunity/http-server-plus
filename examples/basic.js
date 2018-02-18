@@ -2,11 +2,11 @@
 
 // ===================================================================
 
-var httpServerPlus = require('../')
+const httpServerPlus = require('../')
 
 // ===================================================================
 
-var server = httpServerPlus.create(function onRequest (request, response) {
+const server = httpServerPlus.create(function onRequest (request, response) {
   console.log('New request: %s %s', request.method, request.url)
 
   response.end('Nothing to see here.')
@@ -14,7 +14,7 @@ var server = httpServerPlus.create(function onRequest (request, response) {
 
 server.listen({
   host: 'localhost',
-  port: 8080
+  port: 8080,
 }).then(function (niceAddress) {
   console.log('Listening on', niceAddress)
 }).catch(function (error) {
