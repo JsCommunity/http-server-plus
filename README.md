@@ -10,7 +10,8 @@ Installation of the [npm package](https://npmjs.org/package/http-server-plus):
 npm install --save http-server-plus
 ```
 
-To add support for [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2):
+To enable [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) for Node < 8, you need
+to install [spdy](https://www.npmjs.com/package/spdy):
 
 ```
 npm install --save spdy

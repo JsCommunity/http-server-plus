@@ -7,20 +7,25 @@ const EventEmitter = require('events').EventEmitter
 const eventToPromise = require('event-to-promise')
 const forEach = require('lodash/forEach')
 const formatUrl = require('url').format
-const http = require('http')
 const inherits = require('util').inherits
 const isEmpty = require('lodash/isEmpty')
 const map = require('lodash/map')
 const resolvePath = require('path').resolve
+const { createServer } = require('http')
 
 // -------------------------------------------------------------------
 
-let https
-try {
-  https = require('spdy')
-} catch (e) {
-  https = require('https')
-}
+const createSecureServer = (function () {
+  try {
+    return require('spdy').createServer
+  } catch (_) {
+    try {
+      return require('http2').createSecureServer
+    } catch (_) {
+      return require('https').createServer
+    }
+  }
+})()
 
 // ===================================================================
 
@@ -118,10 +123,10 @@ proto.listen = function Server$listen (opts) {
     opts.SNICallback ||
     (opts.cert && opts.key)
   ) {
-    server = https.createServer(opts)
+    server = createSecureServer(opts)
     protocol = 'https'
   } else {
-    server = http.createServer()
+    server = createServer()
     protocol = 'http'
   }
 
