@@ -2731,6 +2731,10 @@ tar@^2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
+tcp-bind@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tcp-bind/-/tcp-bind-1.2.0.tgz#806fb2ca34096069072d564ecfa537f7a58fab50"
+
 test-exclude@^4.1.1:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/test-exclude/-/test-exclude-4.2.0.tgz#07e3613609a362c74516a717515e13322ab45b3c"

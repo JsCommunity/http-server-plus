@@ -30,7 +30,8 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "husky": "^0.14.3",
-    "jest": "^21"
+    "jest": "^21",
+    "tcp-bind": "^1.2.0"
   },
   "scripts": {
     "commitmsg": "yarn test",
@@ -41,9 +42,6 @@
   "jest": {
     "collectCoverage": true,
     "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/src"
-    ],
     "testRegex": "\\.spec\\.js$"
   }
 }
