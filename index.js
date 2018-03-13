@@ -11,7 +11,7 @@ const inherits = require('util').inherits
 const isEmpty = require('lodash/isEmpty')
 const map = require('lodash/map')
 const resolvePath = require('path').resolve
-const { createServer } = require('http')
+const createServer = require('http').createServer
 
 // -------------------------------------------------------------------
 
