@@ -11,21 +11,6 @@ const inherits = require('util').inherits
 const isEmpty = require('lodash/isEmpty')
 const map = require('lodash/map')
 const resolvePath = require('path').resolve
-const createServer = require('http').createServer
-
-// -------------------------------------------------------------------
-
-const createSecureServer = (function () {
-  try {
-    return require('spdy').createServer
-  } catch (_) {
-    try {
-      return require('http2').createSecureServer
-    } catch (_) {
-      return require('https').createServer
-    }
-  }
-})()
 
 // ===================================================================
 
@@ -67,9 +52,11 @@ function getSystemdFd (index) {
 
 // ===================================================================
 
-function Server () {
+function Server (opts) {
   EventEmitter.call(this)
 
+  this._createServer = (opts != null && opts.createServer) || require('http').createServer
+  this._createSecureServer = (opts != null && opts.createSecureServer) || require('https').createServer
   this._servers = Object.create(null)
 }
 inherits(Server, EventEmitter)
@@ -123,10 +110,10 @@ proto.listen = function Server$listen (opts) {
     opts.SNICallback ||
     (opts.cert && opts.key)
   ) {
-    server = createSecureServer(opts)
+    server = this._createSecureServer(opts)
     protocol = 'https'
   } else {
-    server = createServer()
+    server = this._createServer()
     protocol = 'http'
   }
 
@@ -229,9 +216,14 @@ proto.unref = function Server$unref () {
 
 module.exports = exports = Server
 
-exports.create = function create (requestListener) {
-  const server = new Server()
-  if (requestListener) {
+exports.create = function create (opts, requestListener) {
+  if (typeof opts === 'function') {
+    requestListener = opts
+    opts = undefined
+  }
+
+  const server = new Server(opts)
+  if (requestListener !== undefined) {
     server.on('request', requestListener)
   }
   return server

@@ -10,13 +10,6 @@ Installation of the [npm package](https://npmjs.org/package/http-server-plus):
 npm install --save http-server-plus
 ```
 
-To enable [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) for Node < 8, you need
-to install [spdy](https://www.npmjs.com/package/spdy):
-
-```
-npm install --save spdy
-```
-
 ## Example
 
 ```javascript
@@ -105,6 +98,29 @@ async function main () {
     console.error('the server could not listen on', error.niceAddress)
   }
 }
+```
+
+Using [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) for Node >= 8:
+
+```js
+var server = require('http-server-plus').create({
+  createSecureServer: require('http2').createSecureServer
+}, app)
+```
+
+To enable [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) for Node < 8, you need
+to install [spdy](https://www.npmjs.com/package/spdy):
+
+```
+npm install --save spdy
+```
+
+And:
+
+```js
+var server = require('http-server-plus').create({
+  createSecureServer: require('spdy').createServer
+}, app)
 ```
 
 ## Contributions
