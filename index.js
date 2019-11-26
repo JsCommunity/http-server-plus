@@ -199,7 +199,7 @@ function ref(server) {
 }
 
 proto.ref = function Server$ref() {
-  this._servers.forEach(ref);
+  forEach(this._servers, ref);
 };
 
 function unref(server) {
@@ -207,7 +207,7 @@ function unref(server) {
 }
 
 proto.unref = function Server$unref() {
-  this._servers.forEach(unref);
+  forEach(this._servers, unref);
 };
 
 // ===================================================================
