@@ -25,17 +25,19 @@ describe('HttpServerPlus', function () {
   })
 
   describe('.addresses()', function () {
-    it('returns the list of addresses the server is listening at')
+    it.todo('returns the list of addresses the server is listening at')
   })
 
   describe('.niceAddresses()', function () {
-    it('returns the list of human readable addresses the server is listening at')
+    it.todo('returns the list of human readable addresses the server is listening at')
   })
 
   // TODO
   describe('.listen()', function () {
-    it('can use a host:port')
-    it('can use a systemd socket', function () {
+    it.todo('can use a host:port')
+
+    // FIXME: `tcp-bind` does not work anymore
+    it.skip('can use a systemd socket', function () {
       const SD_LISTEN_FDS_START = 3
 
       const server = HttpServerPlus.create()
@@ -54,18 +56,19 @@ describe('HttpServerPlus', function () {
         return server.close()
       })
     })
-    it('can use a socket')
-    it('can use a HTTPS certificate')
-    it('returns a promise which will resolve once listening')
-    it('returns a promise which will reject if failure')
+
+    it.todo('can use a socket')
+    it.todo('can use a HTTPS certificate')
+    it.todo('returns a promise which will resolve once listening')
+    it.todo('returns a promise which will reject if failure')
   })
 
   describe('.close()', function () {
-    it('closes all servers')
-    it('emit the `close` event when all servers are closed')
-    it('emit the `close` event even if there are no servers')
+    it.todo('closes all servers')
+    it.todo('emit the `close` event when all servers are closed')
+    it.todo('emit the `close` event even if there are no servers')
   })
 
   // TODO
-  it('can be used exactly like `{http,https}.Server`')
+  it.todo('can be used exactly like `{http,https}.Server`')
 })

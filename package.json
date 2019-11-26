@@ -23,25 +23,40 @@
     "lodash": "^4.16.0"
   },
   "devDependencies": {
-    "eslint": "^4.18.0",
-    "eslint-config-standard": "^11.0.0",
+    "eslint": "^6.7.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^6.0.0",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "husky": "^0.14.3",
-    "jest": "^21",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^3.1.0",
+    "jest": "^24",
+    "lint-staged": "^9.4.3",
+    "prettier": "^1.19.1",
     "tcp-bind": "^1.2.0"
   },
   "scripts": {
-    "commitmsg": "yarn test",
     "dev-test": "jest --bail --watch",
-    "pretest": "eslint --ignore-path .gitignore --fix .",
+    "pretest": "eslint --ignore-path .gitignore .",
     "test": "jest"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "jest": {
     "collectCoverage": true,
     "testEnvironment": "node",
     "testRegex": "\\.spec\\.js$"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add",
+      "eslint --ignore-pattern '!*'",
+      "jest --findRelatedTests --passWithNoTests"
+    ]
   }
 }
