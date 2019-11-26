@@ -5,7 +5,7 @@
 const assign = require("lodash/assign");
 const EventEmitter = require("events").EventEmitter;
 const eventToPromise = require("event-to-promise");
-const forEach = require("lodash/forEach");
+const forOwn = require("lodash/forOwn");
 const formatUrl = require("url").format;
 const inherits = require("util").inherits;
 const isEmpty = require("lodash/isEmpty");
@@ -90,7 +90,7 @@ proto.close = function Server$close(callback) {
     return Promise.resolve();
   }
   // Closes each servers.
-  forEach(this._servers, close);
+  forOwn(this._servers, close);
 
   return eventToPromise(this, "close");
 };
@@ -163,13 +163,13 @@ proto.listen = function Server$listen(opts) {
   });
 
   const listeners = this.listeners.bind(this);
-  forEach(forwardedEvents, function setUpEventForwarding(event) {
+  forwardedEvents.forEach(function setUpEventForwarding(event) {
     server.on(event, function eventHandler() {
       const ctxt = this;
       const args = arguments;
 
       // Do not use emit directly to keep the original context.
-      forEach(listeners(event), function forwardEvent(listener) {
+      listeners(event).forEach(function forwardEvent(listener) {
         listener.apply(ctxt, args);
       });
     });
@@ -199,7 +199,7 @@ function ref(server) {
 }
 
 proto.ref = function Server$ref() {
-  forEach(this._servers, ref);
+  forOwn(this._servers, ref);
 };
 
 function unref(server) {
@@ -207,7 +207,7 @@ function unref(server) {
 }
 
 proto.unref = function Server$unref() {
-  forEach(this._servers, unref);
+  forOwn(this._servers, unref);
 };
 
 // ===================================================================
