@@ -1,4 +1,6 @@
-# http-server-plus [![Build Status](https://travis-ci.org/JsCommunity/http-server-plus.png?branch=master)](https://travis-ci.org/JsCommunity/http-server-plus)
+# http-server-plus
+
+[![Package Version](https://badgen.net/npm/v/http-server-plus)](https://npmjs.org/package/http-server-plus) [![Build Status](https://travis-ci.org/JsCommunity/http-server-plus.png?branch=master)](https://travis-ci.org/JsCommunity/http-server-plus) [![PackagePhobia](https://badgen.net/packagephobia/install/http-server-plus)](https://packagephobia.now.sh/result?p=http-server-plus) [![Latest Commit](https://badgen.net/github/last-commit/JsCommunity/http-server-plus)](https://github.com/JsCommunity/http-server-plus/commits/master)
 
 > Augmented `http.Server`, HTTP/HTTPS/HTTP2 and multiple ports on the same instance
 
