@@ -1,10 +1,5 @@
 language: node_js
 node_js:
   - stable
+  - lts/*
   - 8
-  - 6
-  - 4
-
-# Use containers.
-# http://docs.travis-ci.com/user/workers/container-based-infrastructure/
-sudo: false
