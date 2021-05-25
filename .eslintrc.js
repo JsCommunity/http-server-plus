@@ -1,14 +1,21 @@
 module.exports = {
   extends: [
+    // standard configuration
     "standard",
+
+    // https://github.com/mysticatea/eslint-plugin-node#-rules
     "plugin:node/recommended",
+
+    // disable rules handled by prettier
     "prettier",
-    "prettier/standard",
   ],
+
+  parserOptions: {
+    sourceType: "script", // or "module" if using ES modules
+  },
+
   rules: {
-    "no-var": "error",
-    "node/no-extraneous-import": "error",
-    "node/no-extraneous-require": "error",
-    "prefer-const": "error",
+    // uncomment if you are using a builder like Babel
+    // "node/no-unsupported-features/es-syntax": "off",
   },
 };

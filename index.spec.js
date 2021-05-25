@@ -10,36 +10,36 @@ const HttpServerPlus = require("./");
 
 // ===================================================================
 
-describe("HttpServerPlus", function() {
-  describe("#create()", function() {
-    it("creates a new instance", function() {
+describe("HttpServerPlus", function () {
+  describe("#create()", function () {
+    it("creates a new instance", function () {
       expect(HttpServerPlus.create()).toBeInstanceOf(HttpServerPlus);
     });
 
-    it("can register a `request` listener", function() {
-      const listener = function() {};
+    it("can register a `request` listener", function () {
+      const listener = function () {};
       const server = HttpServerPlus.create(listener);
 
       expect(server.listeners("request")).toEqual([listener]);
     });
   });
 
-  describe(".addresses()", function() {
+  describe(".addresses()", function () {
     it.todo("returns the list of addresses the server is listening at");
   });
 
-  describe(".niceAddresses()", function() {
+  describe(".niceAddresses()", function () {
     it.todo(
       "returns the list of human readable addresses the server is listening at"
     );
   });
 
   // TODO
-  describe(".listen()", function() {
+  describe(".listen()", function () {
     it.todo("can use a host:port");
 
     // FIXME: `tcp-bind` does not work anymore
-    it.skip("can use a systemd socket", function() {
+    it.skip("can use a systemd socket", function () {
       const SD_LISTEN_FDS_START = 3;
 
       const server = HttpServerPlus.create();
@@ -53,7 +53,7 @@ describe("HttpServerPlus", function() {
         .listen({
           systemdSocket: fd - SD_LISTEN_FDS_START, // systemd fds start at 3 but we have not control over it in Node.
         })
-        .then(function() {
+        .then(function () {
           delete env.LISTEN_FDS;
           delete env.LISTEN_PID;
 
@@ -67,7 +67,7 @@ describe("HttpServerPlus", function() {
     it.todo("returns a promise which will reject if failure");
   });
 
-  describe(".close()", function() {
+  describe(".close()", function () {
     it.todo("closes all servers");
     it.todo("emit the `close` event when all servers are closed");
     it.todo("emit the `close` event even if there are no servers");

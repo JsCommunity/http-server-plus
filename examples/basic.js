@@ -17,9 +17,9 @@ server
     host: "localhost",
     port: 8080,
   })
-  .then(function(niceAddress) {
+  .then(function (niceAddress) {
     console.log("Listening on", niceAddress);
   })
-  .catch(function(error) {
+  .catch(function (error) {
     console.log(error.code, "- Failed to listen on", error.niceAddress);
   });

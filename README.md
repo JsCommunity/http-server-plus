@@ -53,10 +53,10 @@ require("bluebird")
       systemdSocket: 0, // this is a socket index
     }),
   ])
-  .then(function(niceAddresses) {
+  .then(function (niceAddresses) {
     console.log("server is listening on", niceAddresses);
   })
-  .catch(function(error) {
+  .catch(function (error) {
     console.error("The server could not listen on", error.niceAddress);
   });
 ```

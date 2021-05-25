@@ -84,7 +84,7 @@ proto.close = function Server$close(callback) {
   // Emit the close event even if there are no registered servers.
   if (isEmpty(this._servers)) {
     const self = this;
-    setImmediate(function() {
+    setImmediate(function () {
       self.emit("close");
     });
     return Promise.resolve();
@@ -176,7 +176,7 @@ proto.listen = function Server$listen(opts) {
   });
 
   return eventToPromise(server, "listening").then(
-    function() {
+    function () {
       const address = server.address();
       if (typeof address === "string") {
         return protocol + "://" + address;
@@ -187,7 +187,7 @@ proto.listen = function Server$listen(opts) {
         port: address.port,
       });
     },
-    function(error) {
+    function (error) {
       error.niceAddress = niceAddress;
       throw error;
     }
