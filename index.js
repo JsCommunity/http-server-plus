@@ -4,9 +4,9 @@
 
 const assign = require("lodash/assign");
 const EventEmitter = require("events").EventEmitter;
-const eventToPromise = require("event-to-promise");
 const forOwn = require("lodash/forOwn");
 const formatUrl = require("url").format;
+const fromEvent = require("promise-toolbox/fromEvent");
 const inherits = require("util").inherits;
 const isEmpty = require("lodash/isEmpty");
 const map = require("lodash/map");
@@ -92,7 +92,7 @@ proto.close = function Server$close(callback) {
   // Closes each servers.
   forOwn(this._servers, close);
 
-  return eventToPromise(this, "close");
+  return fromEvent(this, "close");
 };
 
 let nextId = 0;
@@ -175,7 +175,7 @@ proto.listen = function Server$listen(opts) {
     });
   });
 
-  return eventToPromise(server, "listening").then(
+  return fromEvent(server, "listening").then(
     function () {
       const address = server.address();
       if (typeof address === "string") {
