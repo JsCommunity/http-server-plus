@@ -19,8 +19,8 @@
     "node": ">=6"
   },
   "dependencies": {
-    "promise-toolbox": "^0.21.0",
-    "lodash": "^4.16.0"
+    "lodash": "^4.16.0",
+    "promise-toolbox": "^0.21.0"
   },
   "devDependencies": {
     "eslint": "^8.13.0",
@@ -30,30 +30,22 @@
     "eslint-plugin-n": "^15.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "husky": "^4.3.8",
-    "jest": "^27.0.1",
     "lint-staged": "^12.4.0",
     "prettier": "^2.3.0",
+    "tap": "^16.0.1",
     "tcp-bind": "^1.2.0"
   },
   "scripts": {
-    "dev-test": "jest --bail --watch",
+    "dev-test": "tap --no-check-coverage --watch",
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "jest"
+    "test": "tap --no-check-coverage"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && npm test"
     }
   },
-  "jest": {
-    "testEnvironment": "node",
-    "testRegex": "\\.spec\\.js$"
-  },
   "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "eslint --ignore-pattern '!*'",
-      "jest --findRelatedTests --passWithNoTests"
-    ]
+    "*.js": "prettier --write"
   }
 }

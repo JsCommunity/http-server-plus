@@ -1,10 +1,10 @@
 "use strict";
 
-/* eslint-env jest */
-
 // ===================================================================
 
+const assert = require("assert/strict");
 const tcpBind = require("tcp-bind");
+const { describe, it } = require("tap").mocha;
 
 const HttpServerPlus = require("./");
 
@@ -13,14 +13,14 @@ const HttpServerPlus = require("./");
 describe("HttpServerPlus", function () {
   describe("#create()", function () {
     it("creates a new instance", function () {
-      expect(HttpServerPlus.create()).toBeInstanceOf(HttpServerPlus);
+      assert(HttpServerPlus.create() instanceof HttpServerPlus);
     });
 
     it("can register a `request` listener", function () {
       const listener = function () {};
       const server = HttpServerPlus.create(listener);
 
-      expect(server.listeners("request")).toEqual([listener]);
+      assert.deepEqual(server.listeners("request"), [listener]);
     });
   });
 
