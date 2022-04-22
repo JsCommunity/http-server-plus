@@ -125,7 +125,7 @@ proto.listen = function Server$listen(opts) {
   // Compute a temporary nice address to display in case of error.
   let niceAddress;
   if (fd != null) {
-    server.listen({ fd: fd });
+    server.listen({ fd });
     niceAddress = protocol + "://<fd:" + fd + ">";
   } else if (socket != null) {
     socket = resolvePath(socket);
@@ -134,7 +134,7 @@ proto.listen = function Server$listen(opts) {
   } else if (port != null) {
     server.listen(port, hostname);
     niceAddress = formatUrl({
-      protocol: protocol,
+      protocol,
 
       // Hostname default to localhost.
       hostname: hostname || "localhost",
@@ -182,7 +182,7 @@ proto.listen = function Server$listen(opts) {
         return protocol + "://" + address;
       }
       return formatUrl({
-        protocol: protocol,
+        protocol,
         hostname: address.address,
         port: address.port,
       });

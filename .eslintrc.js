@@ -4,7 +4,7 @@ module.exports = {
     "standard",
 
     // https://github.com/mysticatea/eslint-plugin-node#-rules
-    "plugin:node/recommended",
+    "plugin:n/recommended",
 
     // disable rules handled by prettier
     "prettier",
