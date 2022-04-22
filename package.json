@@ -19,7 +19,6 @@
     "node": ">=6"
   },
   "dependencies": {
-    "lodash": "^4.16.0",
     "promise-toolbox": "^0.21.0"
   },
   "devDependencies": {

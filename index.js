@@ -2,14 +2,10 @@
 
 // ===================================================================
 
-const assign = require("lodash/assign");
 const EventEmitter = require("events").EventEmitter;
-const forOwn = require("lodash/forOwn");
 const formatUrl = require("url").format;
 const fromEvent = require("promise-toolbox/fromEvent");
 const inherits = require("util").inherits;
-const isEmpty = require("lodash/isEmpty");
-const map = require("lodash/map");
 const resolvePath = require("path").resolve;
 
 // ===================================================================
@@ -32,6 +28,13 @@ function extractProperty(obj, prop) {
   }
 }
 
+function forOwn(obj, cb) {
+  const keys = Object.keys(obj);
+  for (let i = 0, n = keys.length; i < n; ++i) {
+    cb(obj[keys[i]]);
+  }
+}
+
 function getSystemdFd(index) {
   if (process.pid !== +process.env.LISTEN_PID) {
     throw new Error("systemd sockets are not meant for us (LISTEN_PID)");
@@ -50,6 +53,8 @@ function getSystemdFd(index) {
   return index + 3; // 3 = SD_LISTEN_FDS_START
 }
 
+const isEmpty = (obj) => Object.keys(obj).length === 0;
+
 // ===================================================================
 
 function Server(opts) {
@@ -65,11 +70,12 @@ inherits(Server, EventEmitter);
 
 const proto = Server.prototype;
 
-function getAddress(server) {
-  return server.address();
+function getAddress(serverId) {
+  return this[serverId].address();
 }
 proto.addresses = function Server$addresses() {
-  return map(this._servers, getAddress);
+  const servers = this._servers;
+  return Object.keys(servers).map(getAddress, servers);
 };
 
 function close(server) {
@@ -97,7 +103,7 @@ proto.close = function Server$close(callback) {
 
 let nextId = 0;
 proto.listen = function Server$listen(opts) {
-  opts = assign({}, opts);
+  opts = Object.assign({}, opts);
   const hostname = extractProperty(opts, "hostname");
   const port = extractProperty(opts, "port");
   const systemdSocket = extractProperty(opts, "systemdSocket");
