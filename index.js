@@ -12,6 +12,7 @@ const resolvePath = require("path").resolve;
 
 const forwardedEvents = [
   "checkContinue",
+  "checkExpectation",
   "clientError",
   "connect",
   "connection",
