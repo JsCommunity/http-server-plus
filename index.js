@@ -57,6 +57,22 @@ const isEmpty = (obj) => Object.keys(obj).length === 0;
 
 // ===================================================================
 
+function onNewListener(event, listener) {
+  if (forwardedEvents.includes(event)) {
+    forOwn(this._servers, (server) => {
+      server.on(event, listener);
+    });
+  }
+}
+
+function onRemoveListener(event, listener) {
+  if (forwardedEvents.includes(event)) {
+    forOwn(this._servers, (server) => {
+      server.off(event, listener);
+    });
+  }
+}
+
 function Server(opts) {
   EventEmitter.call(this);
 
@@ -65,6 +81,8 @@ function Server(opts) {
   this._createSecureServer =
     (opts != null && opts.createSecureServer) || require("https").createServer;
   this._servers = Object.create(null);
+
+  this.on("removeListener", onRemoveListener).on("newListener", onNewListener);
 }
 inherits(Server, EventEmitter);
 
@@ -168,16 +186,9 @@ proto.listen = function Server$listen(opts) {
     // listeners?
   });
 
-  const listeners = this.listeners.bind(this);
-  forwardedEvents.forEach(function setUpEventForwarding(event) {
-    server.on(event, function eventHandler() {
-      const ctxt = this;
-      const args = arguments;
-
-      // Do not use emit directly to keep the original context.
-      listeners(event).forEach(function forwardEvent(listener) {
-        listener.apply(ctxt, args);
-      });
+  forwardedEvents.forEach((event) => {
+    this.listeners(event).forEach((listener) => {
+      server.on(event, listener);
     });
   });
 
