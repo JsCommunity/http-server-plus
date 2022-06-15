@@ -123,8 +123,16 @@ proto.close = function Server$close(callback) {
 let nextId = 0;
 proto.listen = function Server$listen(opts) {
   opts = Object.assign({}, opts);
+
+  if (opts.hostname === "localhost") {
+    return Promise.all([
+      this.listen(Object.assign(opts, { hostname: "::1" })),
+      this.listen(Object.assign(opts, { hostname: "127.0.0.1" })),
+    ]).then((addresses) => addresses[0]);
+  }
+
   const hostname = extractProperty(opts, "hostname");
-  const port = extractProperty(opts, "port");
+  let port = extractProperty(opts, "port");
   const systemdSocket = extractProperty(opts, "systemdSocket");
   let fd = extractProperty(opts, "fd");
   let socket = extractProperty(opts, "socket");

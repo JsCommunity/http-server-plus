@@ -63,6 +63,8 @@ require("bluebird")
   });
 ```
 
+> As a convenience, if `hostname` is `localhost`, it will listen on both IPv4 (`127.0.0.1`) and IPv6 (`::1`), similar to what Node does if no `hostname` are provided (`0.0.0.0` and `::`).
+
 Using [ES2016's async functions](https://github.com/tc39/ecmascript-asyncawait):
 
 ```javascript
