@@ -156,7 +156,10 @@ proto.listen = function Server$listen(opts) {
     socket = resolvePath(socket);
     server.listen(socket);
     niceAddress = protocol + "://" + socket;
-  } else if (port != null) {
+  } else {
+    if (port == null) {
+      port = protocol === "https" ? 443 : 80;
+    }
     server.listen(port, hostname);
     niceAddress = formatUrl({
       protocol,
@@ -167,8 +170,6 @@ proto.listen = function Server$listen(opts) {
       // No port means random, unknown for now.
       port: port || "<unknown>",
     });
-  } else {
-    throw new Error("invalid options (requires either socket or port)");
   }
 
   const emit = this.emit.bind(this);

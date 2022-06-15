@@ -27,16 +27,18 @@ require("bluebird")
     // Listen on port localhost:80.
     server.listen({
       hostname: "localhost",
-      port: 80,
     }),
 
     // Listen on port 443, using HTTPS.
     server.listen({
-      port: 443,
-
       cert: require("fs").readFileSync(__dirname + "/certificate.pem"),
       key: require("fs").readFileSync(__dirname + "/private_key.pem"),
     }),
+
+    server.listen({
+      // Listen on localhost:8080
+      port: 8080,
+    })
 
     // Listen on socket.
     server.listen({
