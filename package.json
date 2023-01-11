@@ -1,6 +1,6 @@
 {
   "name": "http-server-plus",
-  "version": "0.12.0",
+  "version": "1.0.0",
   "license": "ISC",
   "description": "Augmented `http.Server`, HTTP/HTTPS/HTTP2 and multiple ports on the same instance",
   "keywords": [
