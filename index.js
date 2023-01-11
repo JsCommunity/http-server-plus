@@ -144,7 +144,7 @@ proto.listen = function Server$listen(opts) {
     server = this._createSecureServer(opts);
     protocol = "https";
   } else {
-    server = this._createServer();
+    server = this._createServer(opts);
     protocol = "http";
   }
 
